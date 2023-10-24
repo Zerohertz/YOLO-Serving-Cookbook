@@ -1,0 +1,23 @@
+version: "3.5"
+
+services:
+    tritoninferenceserver:
+        container_name: server
+        image: nvcr.io/nvidia/tritonserver:23.06-py3
+        environment:
+            - NVIDIA_VISIBLE_DEVICES=0
+        volumes:
+            - ${PWD}/src/server:/models
+        command: tritonserver --model-repository=/models
+
+    fastapi:
+        container_name: client
+        build:
+            context: .
+            dockerfile: ./src/client/Dockerfile
+        ports:
+            - "80:80"
+
+networks:
+    default:
+        name: mlops-network

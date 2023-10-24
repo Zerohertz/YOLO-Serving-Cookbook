@@ -1,3 +1,5 @@
+import base64
+import time
 from typing import Tuple
 
 import cv2
@@ -11,7 +13,6 @@ from tritonclient.utils import *
 def load_image(IMAGE_PATH: str) -> np.ndarray:
     image = cv2.imread(IMAGE_PATH)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    print("image.shape:", image.shape)
     return image
 
 
@@ -23,7 +24,7 @@ def preprocess(
     scaleFill=False,
     scaleup=True,
     stride=32,
-):
+) -> (np.ndarray, Tuple, Tuple):
     shape = im.shape[:2]
     if isinstance(new_shape, int):
         new_shape = (new_shape, new_shape)
@@ -51,14 +52,13 @@ def preprocess(
     return im, ratio, (dw, dh)
 
 
-def inference(input_image: np.ndarray):
-    SERVER_URL = "0.0.0.0:8001"
+def inference(input_image: np.ndarray) -> np.ndarray:
+    SERVER_URL = "server:8001"
     MODEL_NAME = "YOLO"
     cv2.imwrite("input_image.jpg", input_image)
     input_image = input_image.astype("float32")
     input_image = input_image.transpose((2, 0, 1))[np.newaxis, :] / 255.0
     input_image = np.ascontiguousarray(input_image)
-    print("input_image.shape:", input_image.shape)
     with grpcclient.InferenceServerClient(SERVER_URL) as triton_client:
         inputs = [
             grpcclient.InferInput(
@@ -72,7 +72,6 @@ def inference(input_image: np.ndarray):
         )
         response.get_response()
         output0 = response.as_numpy("output0")
-    print("output0.shape:", output0.shape)
     return output0
 
 
@@ -110,39 +109,58 @@ def postprocess(
     indices = cv2.dnn.NMSBoxes(
         bboxes.tolist(), scores.tolist(), conf_thresh, iou_thresh
     )
-    print("[Before NMS] detections.shape:", detections.shape)
-    print("[After NMS] detections.shape:", detections[indices].shape)
     return detections[indices]
 
 
-if __name__ == "__main__":
-    with open("data/coco.yaml") as f:
+def visualize(img: np.ndarray, results: np.ndarray) -> np.ndarray:
+    with open("/app/data/coco.yaml") as f:
         labels = yaml.load(f, Loader=yaml.FullLoader)["names"]
-
-    image = load_image("test.jpg")
-    input_image, r, dwdh = preprocess(image)
-    output = inference(input_image)
-    results = postprocess(output, r, dwdh)
-
     color = sns.color_palette("pastel", len(labels))
     color = [(int(r * 255), int(g * 255), int(b * 255)) for r, g, b in color]
     thickness = 2
     for result in results:
-        pt1, pt2, score, class_id = (
+        pt1, pt2, obj_conf, class_conf, class_id = (
             result[0:2].astype(int),
             result[2:4].astype(int),
+            result[4],
             result[5],
             int(result[6]),
         )
-        cv2.rectangle(image, pt1, pt2, color[class_id], thickness)
-        image = cv2.putText(
-            image,
-            labels[class_id],
+        cv2.rectangle(img, pt1, pt2, color[class_id], thickness)
+        img = cv2.putText(
+            img,
+            f"[{labels[class_id]}] OBJ: {obj_conf:.2f} | CLASS: {class_conf:.2f}",
             pt1,
             fontFace=cv2.FONT_HERSHEY_SIMPLEX,
             fontScale=1,
             color=color[class_id],
             thickness=2,
         )
-    else:
-        cv2.imwrite("output.jpg", image[:, :, ::-1])
+    return img[:, :, ::-1]
+
+
+def main(img):
+    img = base64.b64decode(img)
+    img = np.frombuffer(img, dtype=np.uint8)
+    img = cv2.imdecode(img, cv2.IMREAD_COLOR)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    preprocess_start = time.time()
+    input_image, r, dwdh = preprocess(img)
+    preprocess_end = time.time()
+    output = inference(input_image)
+    inference_end = time.time()
+    results = postprocess(output, r, dwdh)
+    postprocess_end = time.time()
+    img = visualize(img, results)
+    visualize_end = time.time()
+
+    process_time = {
+        "preprocess": preprocess_end - preprocess_start,
+        "inference": inference_end - preprocess_end,
+        "postprocess": postprocess_end - inference_end,
+        "visualize": visualize_end - postprocess_end,
+    }
+
+    _, buffer = cv2.imencode(".jpg", img)
+    return base64.b64encode(buffer).decode("utf-8"), results, process_time
