@@ -160,6 +160,7 @@ def main(img):
         "inference": inference_end - preprocess_end,
         "postprocess": postprocess_end - inference_end,
         "visualize": visualize_end - postprocess_end,
+        "total": visualize_end - preprocess_start,
     }
 
     _, buffer = cv2.imencode(".jpg", img)
