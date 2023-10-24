@@ -10,12 +10,6 @@ import yaml
 from tritonclient.utils import *
 
 
-def load_image(IMAGE_PATH: str) -> np.ndarray:
-    image = cv2.imread(IMAGE_PATH)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    return image
-
-
 def preprocess(
     im: np.ndarray,
     new_shape=(640, 640),
