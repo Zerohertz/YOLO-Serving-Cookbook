@@ -128,9 +128,10 @@ if __name__ == "__main__":
     color = [(int(r * 255), int(g * 255), int(b * 255)) for r, g, b in color]
     thickness = 2
     for result in results:
-        pt1, pt2, score, class_id = (
+        pt1, pt2, obj_conf, class_conf, class_id = (
             result[0:2].astype(int),
             result[2:4].astype(int),
+            result[4],
             result[5],
             int(result[6]),
         )
