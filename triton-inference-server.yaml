@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: triton-inference-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: triton-inference-server
+  template:
+    metadata:
+      labels:
+        app: triton-inference-server
+    spec:
+      containers:
+        - name: server
+          image: yolo-server:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: "0"
+          command: ["tritonserver", "--model-repository=/models"]
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1024Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: triton-inference-server-svc
+spec:
+  selector:
+    app: triton-inference-server
+  ports:
+    - protocol: TCP
+      port: 8001
+      targetPort: 8001

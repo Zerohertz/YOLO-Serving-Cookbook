@@ -53,7 +53,7 @@ def preprocess(
 
 
 def inference(input_image: np.ndarray) -> np.ndarray:
-    SERVER_URL = "server:8001"
+    SERVER_URL = "triton-inference-server-svc.yolo:8001"
     MODEL_NAME = "YOLO"
     cv2.imwrite("input_image.jpg", input_image)
     input_image = input_image.astype("float32")

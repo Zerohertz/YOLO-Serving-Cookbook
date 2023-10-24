@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import requests
 
-URL = "http://0.0.0.0:80"
+URL = "http://zerohertz.xyz:80/"
 
 HEADERS = {
     "accept": "application/json",
