@@ -15,4 +15,4 @@ RUN pip install --no-cache-dir --upgrade -r /requirements.txt
 
 COPY ./app/ /app/
 
-CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:80", "--log-level", "debug", "app:app"]
+CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:80", "--log-level", "debug", "--access-logfile", "-", "app:app"]
