@@ -10,6 +10,6 @@ class RequestModel(BaseModel):
 
 
 @app.post("/")
-def inference(request: RequestModel):
-    img, results, pt = main(request.img)
+async def inference(request: RequestModel):
+    img, results, pt = await main(request.img)
     return {"visualized_img": img, "results": results.tolist(), "process_time": pt}
