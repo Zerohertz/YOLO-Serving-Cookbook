@@ -49,7 +49,6 @@ async def preprocess(
 async def inference(input_image: np.ndarray) -> np.ndarray:
     SERVER_URL = "triton-inference-server-svc.yolo:8001"
     MODEL_NAME = "YOLO"
-    cv2.imwrite("input_image.jpg", input_image)
     input_image = input_image.astype("float32")
     input_image = input_image.transpose((2, 0, 1))[np.newaxis, :] / 255.0
     input_image = np.ascontiguousarray(input_image)
