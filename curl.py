@@ -37,7 +37,7 @@ def main(SESSION):
     DATA = {
         "img": base64.b64encode(buffer).decode("utf-8"),
     }
-    max_workers = 10
+    max_workers = 100
 
     START = time.time()
     if SERIAL:
