@@ -10,7 +10,7 @@ import yaml
 from tritonclient.utils import *
 
 
-async def preprocess(
+def preprocess(
     im: np.ndarray,
     new_shape=(640, 640),
     color=(114, 114, 114),
@@ -46,7 +46,7 @@ async def preprocess(
     return im, ratio, (dw, dh)
 
 
-async def inference(input_image: np.ndarray) -> np.ndarray:
+def inference(input_image: np.ndarray) -> np.ndarray:
     SERVER_URL = "triton-inference-server-svc.yolo:8001"
     MODEL_NAME = "YOLO"
     input_image = input_image.astype("float32")
@@ -68,7 +68,7 @@ async def inference(input_image: np.ndarray) -> np.ndarray:
     return output0
 
 
-async def postprocess(
+def postprocess(
     predictions: np.ndarray, r: Tuple, dwdh: Tuple, conf_thresh=0.25, iou_thresh=0.45
 ) -> np.ndarray:
     """
@@ -105,7 +105,7 @@ async def postprocess(
     return detections[indices]
 
 
-async def visualize(img: np.ndarray, results: np.ndarray) -> np.ndarray:
+def visualize(img: np.ndarray, results: np.ndarray) -> np.ndarray:
     with open("/app/data/coco.yaml") as f:
         labels = yaml.load(f, Loader=yaml.FullLoader)["names"]
     color = sns.color_palette("pastel", len(labels))
@@ -132,20 +132,20 @@ async def visualize(img: np.ndarray, results: np.ndarray) -> np.ndarray:
     return img[:, :, ::-1]
 
 
-async def main(img):
+def main(img):
     img = base64.b64decode(img)
     img = np.frombuffer(img, dtype=np.uint8)
     img = cv2.imdecode(img, cv2.IMREAD_COLOR)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     preprocess_start = time.time()
-    input_image, r, dwdh = await preprocess(img)
+    input_image, r, dwdh = preprocess(img)
     preprocess_end = time.time()
-    output = await inference(input_image)
+    output = inference(input_image)
     inference_end = time.time()
-    results = await postprocess(output, r, dwdh)
+    results = postprocess(output, r, dwdh)
     postprocess_end = time.time()
-    img = await visualize(img, results)
+    img = visualize(img, results)
     visualize_end = time.time()
 
     process_time = {

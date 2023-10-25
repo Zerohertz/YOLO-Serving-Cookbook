@@ -1,6 +1,7 @@
 from fastapi import FastAPI
-from main import main
 from pydantic import BaseModel
+
+from main import main
 
 app = FastAPI()
 
@@ -10,6 +11,6 @@ class RequestModel(BaseModel):
 
 
 @app.post("/")
-async def inference(request: RequestModel):
-    img, results, pt = await main(request.img)
+def inference(request: RequestModel):
+    img, results, pt = main(request.img)
     return {"visualized_img": img, "results": results.tolist(), "process_time": pt}
