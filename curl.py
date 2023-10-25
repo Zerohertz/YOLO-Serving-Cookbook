@@ -6,7 +6,6 @@ from concurrent.futures import ThreadPoolExecutor
 import cv2
 import requests
 
-FILE_NAME = "tmp"
 SERIAL = True
 RANDOM = False
 
@@ -41,10 +40,15 @@ def main(SESSION):
 
     START = time.time()
     if SERIAL:
+        FILE_NAME = "SERIAL"
         responses = []
         for _ in range(max_workers):
             responses.append(send_request(HEADERS, DATA))
     else:
+        if RANDOM:
+            FILE_NAME = "RANDOM"
+        else:
+            FILE_NAME = "CONCURRENCY"
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             responses = list(
                 executor.map(
