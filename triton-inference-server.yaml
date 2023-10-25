@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: triton-inference-server
 spec:
-  replicas: 5
+  replicas: 1
   selector:
     matchLabels:
       app: triton-inference-server
