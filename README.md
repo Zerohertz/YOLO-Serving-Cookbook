@@ -182,3 +182,62 @@ FastAPI를 사용하면서 특정 패턴의 요청에서만 오류가 발생하�
 
 `HPA` 사용 시 한 순간에 100회의 요청이 입력되면 replica를 생성하기 전에 단일 `fastapi` pod에 입력되기 때문에 autoscaling 효과를 볼 수 없다.
 따라서 autoscaling을 원활히 하려면 `Resource` 기준이 아닌 새로운 `metrics`가 필요하다.
+
+<details>
+<summary>
+예시: <code>hpa.yaml</code>
+</summary>
+
+```yaml
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: triton-inference-server-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: triton-inference-server
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: fastapi-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: fastapi
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+```
+
+</details>
