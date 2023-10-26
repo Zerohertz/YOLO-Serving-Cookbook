@@ -2,6 +2,13 @@
     :camera_flash: YOLO Serving Cookbook :camera_flash:
 </h1>
 
+<p align = "center">
+    <img src="https://img.shields.io/badge/Python-3766AB?style=flat-square&logo=Python&logoColor=white"/> <img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=flat-square&logo=OpenCV&logoColor=white"/> <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=FastAPI&logoColor=white"/>
+</p>
+<p align = "center">
+    <img src="https://img.shields.io/badge/ONNX-005CED?style=flat-square&logo=ONNX&logoColor=white"/> <img src="https://img.shields.io/badge/Triton%20Inference%20Server-76B900?style=flat-square&logo=nvidia&logoColor=white"/> <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=Docker&logoColor=white"/> <img src="https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=Kubernetes&logoColor=white"/> <img src="https://img.shields.io/badge/Traefik Proxy-24A1C1?style=flat-square&logo=Traefik Proxy&logoColor=white"/>
+</p>
+
 ## [1. Docker](https://github.com/Zerohertz/YOLO-Serving/tree/1.Docker)
 
 <details>
