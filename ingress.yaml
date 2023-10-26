@@ -9,5 +9,5 @@ spec:
     - match: Host(`zerohertz.xyz`)
       kind: Rule
       services:
-        - name: fastapi-svc
-          port: 80
+        - name: gradio-svc
+          port: 7860

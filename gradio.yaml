@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fastapi
+  name: gradio
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: fastapi
+      app: gradio
   template:
     metadata:
       labels:
-        app: fastapi
+        app: gradio
     spec:
       containers:
-        - name: client
-          image: yolo-client:latest
+        - name: gradio
+          image: yolo-gradio:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 80
+            - containerPort: 7860
           resources:
             requests:
               memory: "1024Mi"
@@ -29,11 +29,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: fastapi-svc
+  name: gradio-svc
 spec:
   selector:
-    app: fastapi
+    app: gradio
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
+      port: 7860
+      targetPort: 7860
