@@ -22,11 +22,9 @@ def send_request(HEADERS, DATA, RANDOM=False):
         time.sleep(random.randrange(0, 20))
     response = requests.post(URL, headers=HEADERS, json=DATA, verify=False)
     res = response.json()
-    print(
-        f"""TOTAL: {res["process_time"]["total"]:.2f} | PREPROCESS: {res["process_time"]["preprocess"]:.2f} | INFERENCE: {res["process_time"]["inference"]:.2f} | POSTPROCESS: {res["process_time"]["postprocess"]:.2f} | VISUALIZE: {res["process_time"]["visualize"]:.2f}"""
-    )
+    print(f"""TOTAL: {res["process_time"]:.2f}""")
     print(res["results"][0])
-    return str(res["process_time"]["total"]) + "\n"
+    return str(res["process_time"]) + "\n"
 
 
 def main(SESSION):

@@ -28,6 +28,13 @@ spec:
             limits:
               memory: "2048Mi"
               cpu: "2000m"
+          volumeMounts:
+            - name: dshm
+              mountPath: /dev/shm
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
 ---
 apiVersion: v1
 kind: Service

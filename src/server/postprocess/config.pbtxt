@@ -1,0 +1,44 @@
+name: "postprocess"
+backend: "python"
+
+input [
+    {
+        name: "INPUT_IMAGE"
+        data_type: TYPE_UINT8
+        dims: [-1,-1,-1]
+    },
+    {
+        name: "INFERENCE_FEATURES"
+        data_type: TYPE_FP32
+        dims: [1,25200,85]
+    },
+    {
+        name: "PRE_PROCESSING_RATIO"
+        data_type: TYPE_FP32
+        dims: [2]
+    },
+    {
+        name: "PRE_PROCESSING_DWDH"
+        data_type: TYPE_FP32
+        dims: [2]
+    }
+]
+
+output [
+    {
+        name: "RESULTS"
+        data_type: TYPE_FP32
+        dims: [-1,-1]
+    },
+    {
+        name: "VISUALIZE"
+        data_type: TYPE_UINT8
+        dims: [-1,-1,-1]
+    }
+]
+
+instance_group [
+    {
+        kind: KIND_CPU
+    }
+]
