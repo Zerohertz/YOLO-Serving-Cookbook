@@ -3,7 +3,7 @@
 </h1>
 
 <p align = "center">
-    <img src="https://img.shields.io/badge/Python-3766AB?style=flat-square&logo=Python&logoColor=white"/> <img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=flat-square&logo=OpenCV&logoColor=white"/> <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=FastAPI&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Python-3766AB?style=flat-square&logo=Python&logoColor=white"/> <img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=flat-square&logo=OpenCV&logoColor=white"/> <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=FastAPI&logoColor=white"/> <img src="https://img.shields.io/badge/Gradio-EE8332?style=flat-square&logo=Openlayers&logoColor=white"/>
 </p>
 <p align = "center">
     <img src="https://img.shields.io/badge/ONNX-005CED?style=flat-square&logo=ONNX&logoColor=white"/> <img src="https://img.shields.io/badge/Triton%20Inference%20Server-76B900?style=flat-square&logo=nvidia&logoColor=white"/> <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=Docker&logoColor=white"/> <img src="https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=Kubernetes&logoColor=white"/> <img src="https://img.shields.io/badge/Traefik Proxy-24A1C1?style=flat-square&logo=Traefik Proxy&logoColor=white"/>
@@ -86,14 +86,29 @@ Architecture (with Ensemble)
 Figures
 </summary>
 
-![](figures/EACH-SERIAL.png)
-![](figures/EACH-CONCURRENCY.png)
-![](figures/EACH-CONCURRENCY-ASYNC.png)
-![](figures/EACH-RANDOM.png)
+<table align="center">
+<tr>
+<td><img src="figures/EACH-SERIAL.png" alt="EACH-SERIAL" height="250"/></td>
+<td><img src="figures/TOTAL-SERIAL.png" alt="TOTAL-SERIAL" height="250"/></td>
+</tr>
+</table>
 
-![](figures/TOTAL-SERIAL.png)
-![](figures/TOTAL-CONCURRENCY.png)
-![](figures/TOTAL-RANDOM.png)
+<table align="center">
+<tr>
+<td><img src="figures/EACH-CONCURRENCY.png" alt="EACH-CONCURRENCY" height="250"/></td>
+<td><img src="figures/EACH-CONCURRENCY-ASYNC.png" alt="EACH-CONCURRENCY-ASYNC" height="250"/></td>
+</tr>
+<tr>
+<td colspan="2" align="center"><img src="figures/TOTAL-CONCURRENCY.png" alt="TOTAL-CONCURRENCY" height="250"/></td>
+</tr>
+</table>
+
+<table align="center">
+<tr>
+<td><img src="figures/EACH-RANDOM.png" alt="EACH-RANDOM" height="250"/></td>
+<td><img src="figures/TOTAL-RANDOM.png" alt="TOTAL-RANDOM" height="250"/></td>
+</tr>
+</table>
 
 </details>
 
