@@ -4,19 +4,47 @@
 
 ## [1. Docker](https://github.com/Zerohertz/YOLO-Serving/tree/1.Docker)
 
+<details>
+<summary>
+Architecture
+</summary>
+
 ![Docker](https://github.com/Zerohertz/Zerohertz/assets/42334717/16f71b10-e68a-4016-a87f-2a6fbb9946a9)
+
+</details>
 
 ## [2. Docker Compose](https://github.com/Zerohertz/YOLO-Serving/tree/2.Docker-Compose)
 
+<details>
+<summary>
+Architecture
+</summary>
+
 ![Docker-Compose](https://github.com/Zerohertz/Zerohertz/assets/42334717/e243f0c8-4ace-4a86-96e4-067066047dab)
 
+</details>
+
 ## 3. Kubernetes
+
+<details>
+<summary>
+Architecture (without Ensemble)
+</summary>
 
 ![Kubernetes-Rep=1](https://github.com/Zerohertz/Zerohertz/assets/42334717/e619da5f-015d-4c4d-bb4e-a717c7e5395c)
 ![Kubernetes-Rep=5](https://github.com/Zerohertz/Zerohertz/assets/42334717/571f781a-5842-45e9-9652-949c65c34efd)
 
+</details>
+
+<details>
+<summary>
+Architecture (with Ensemble)
+</summary>
+
 ![Kubernetes-Ensemble-Rep=1](https://github.com/Zerohertz/Zerohertz/assets/42334717/0292b7a6-3842-40b1-8b8c-c07ce2b2f0c9)
 ![Kubernetes-Ensemble-Rep=5](https://github.com/Zerohertz/Zerohertz/assets/42334717/ddba3515-6382-4b1c-9ab0-3e43dca83921)
+
+</details>
 
 ### Experimental Setup
 
