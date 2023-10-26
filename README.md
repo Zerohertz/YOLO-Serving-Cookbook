@@ -1,12 +1,16 @@
-# [1. Docker](https://github.com/Zerohertz/YOLO-Serving/tree/1.Docker)
+<h1 align = "center">
+    :camera_flash: YOLO Serving Cookbook :camera_flash:
+</h1>
+
+## [1. Docker](https://github.com/Zerohertz/YOLO-Serving/tree/1.Docker)
 
 ![Docker](https://github.com/Zerohertz/Zerohertz/assets/42334717/16f71b10-e68a-4016-a87f-2a6fbb9946a9)
 
-# [2. Docker Compose](https://github.com/Zerohertz/YOLO-Serving/tree/2.Docker-Compose)
+## [2. Docker Compose](https://github.com/Zerohertz/YOLO-Serving/tree/2.Docker-Compose)
 
 ![Docker-Compose](https://github.com/Zerohertz/Zerohertz/assets/42334717/e243f0c8-4ace-4a86-96e4-067066047dab)
 
-# 3. Kubernetes
+## 3. Kubernetes
 
 ![Kubernetes-Rep=1](https://github.com/Zerohertz/Zerohertz/assets/42334717/e619da5f-015d-4c4d-bb4e-a717c7e5395c)
 ![Kubernetes-Rep=5](https://github.com/Zerohertz/Zerohertz/assets/42334717/571f781a-5842-45e9-9652-949c65c34efd)
@@ -14,19 +18,19 @@
 ![Kubernetes-Ensemble-Rep=1](https://github.com/Zerohertz/Zerohertz/assets/42334717/0292b7a6-3842-40b1-8b8c-c07ce2b2f0c9)
 ![Kubernetes-Ensemble-Rep=5](https://github.com/Zerohertz/Zerohertz/assets/42334717/ddba3515-6382-4b1c-9ab0-3e43dca83921)
 
-## Experimental Setup
+### Experimental Setup
 
 + Server
   + `Sync`: FastAPI에서 동기 처리
   + `Async`: FastAPI에서 비동기 처리
   + `Rep`: `fastapi`와 `triton-inference-server`의 replica 수
-  + `Ensemble`: `triton-inference-server` 내에서 [ensemble](https://github.com/triton-inference-server/server/blob/main/docs/user_guide/architecture.md#ensemble-models)을 활용해 전, 후처리 및 시각화를 수행
+  + `Ensemble`: `triton-inference-server` 내에서 [ensemble](https://github.com/triton-inference-server/server/blob/main/docs/user_guide/architecture.md#ensemble-models)을 활용해 전, 후처리 및 시각화를 수행 (`fastapi`는 비동기로 작동)
 + Client (FastAPI를 100회 호출, 10회 실험)
   + `Serial`: `for`문을 이용해 직렬적 호출
   + `Concurrency`: `ThreadPoolExecutor`를 이용해 동시 호출
   + `Random`: `ThreadPoolExecutor`를 이용 및 0 ~ 20초 이후 랜덤 호출
 
-## Results
+### Results
 
 <div align="center">
 
@@ -42,6 +46,11 @@
 
 </div>
 
+<details>
+<summary>
+Figures
+</summary>
+
 ![](figures/EACH-SERIAL.png)
 ![](figures/EACH-CONCURRENCY.png)
 ![](figures/EACH-CONCURRENCY-ASYNC.png)
@@ -49,11 +58,13 @@
 
 ![](figures/TOTAL-SERIAL.png)
 ![](figures/TOTAL-CONCURRENCY.png)
-![](figures/EACH-RANDOM.png)
+![](figures/TOTAL-RANDOM.png)
 
-## Discussion
+</details>
 
-### Sync vs. Async
+### Discussion
+
+#### Sync vs. Async
 
 <details>
 <summary>
@@ -118,7 +129,7 @@ FastAPI를 사용하면서 특정 패턴의 요청에서만 오류가 발생하�
 </details>
 
 
-### Replicas
+#### Replicas
 
 <details>
 <summary>
@@ -139,7 +150,7 @@ FastAPI를 사용하면서 특정 패턴의 요청에서만 오류가 발생하�
 
 </details>
 
-### Autoscaling
+#### Autoscaling
 
 `HPA` 사용 시 한 순간에 100회의 요청이 입력되면 replica를 생성하기 전에 단일 `fastapi` pod에 입력되기 때문에 autoscaling 효과를 볼 수 없다.
 따라서 autoscaling을 원활히 하려면 `Resource` 기준이 아닌 새로운 `metrics`가 필요하다.
