@@ -83,6 +83,8 @@ Architecture (with Ensemble)
 
 ### Results
 
+<div align="right">단위: <code>[Sec]</code></div>
+
 <div align="center">
 
 |Server Arch.|Mean(Serial)|End(Serial)|Mean(Concurrency)|End(Concurrency)|Mean(Random)|End(Random)|
@@ -130,7 +132,25 @@ Figures
 
 ### Discussion
 
-#### Sync vs. Async
+#### Sync, Async, Ensemble
+
+<div align="right">단위: <code>[Sec]</code></div>
+
+<div align="center">
+
+|Server Arch.|Mean(Serial)|End(Serial)|Mean(Concurrency)|End(Concurrency)|Mean(Random)|End(Random)|
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|Sync|0.647|73.499|33.752|95.496|33.460|105.160|
+|Async|0.652|73.395|1.320|60.991|1.345|61.094|
+|Ensemble|0.680|76.270|1.332|60.269|-|-|
+
+</div>
+
+직렬적 호출 시 동기, 비동기 방식은 차이가 존재하지 않는다.
+
+하지만 비동기 방식은 동기 방식에 비해 동시적 호출 시 약 36.51%, 랜덤 호출 시 약 41.90% 빠른 응답을 확인할 수 있다.
+
+반면 ensemble 방식을 통해 큰 이점은 확인하지 못했지만, 본 실험의 한계일 수 있다. (리소스, 데이터 규모, ...)
 
 <details>
 <summary>
@@ -172,7 +192,9 @@ requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
 ```
 
 이는 `Random` 조건에서 발생하는 오류인데, `Concurrency` 조건에선 발생하지 않는게 이상하다.
+
 모든 pod에 대해 로그가 남아있나 살펴봤지만 발견하지 못했다.
+
 아마 비동기적으로 `triton-inference-server`의 service를 호출하다가 생긴 오류로 보인다.
 
 > Chat GPT 선생님의 답변
@@ -197,12 +219,28 @@ FastAPI를 사용하면서 특정 패턴의 요청에서만 오류가 발생하�
 
 #### Replicas
 
+<div align="right">단위: <code>[Sec]</code></div>
+
+<div align="center">
+
+|Server Arch.|Mean(Serial)|End(Serial)|Mean(Concurrency)|End(Concurrency)|Mean(Random)|End(Random)|
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|Rep=1|0.691|77.682|14.501|96.777|20.415|104.487|
+|Rep=5|0.629|71.094|9.767|47.726|14.391|61.767|
+
+</div>
+
+Replica 수의 증가를 통해 API의 응답을 빠르게 할 수 있음을 확인했다. ([파드는 서비스와 통신하도록 구성할 수 있으며, 서비스와의 통신은 서비스의 맴버 중 일부 파드에 자동적으로 로드-밸런싱 된다.](https://kubernetes.io/ko/docs/tutorials/services/connect-applications-service/#%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%83%9D%EC%84%B1%ED%95%98%EA%B8%B0))
+
+특히 동시적 호출 시 큰 향상이 있음을 확인할 수 있다.
+
 <details>
 <summary>
 <code>WORKER TIMEOUT</code>
 </summary>
 
 `fastapi`의 replica는 1개, `triton-inference-server`의 replica는 5개 일 때는 발생하지 않던 오류가 `fastapi`의 replica는 5개, `triton-inference-server`의 replica는 5개 일 때 아래와 같이 발생했다.
+
 이것은 `"--timeout", "120"`을 `Dockerfile`에 추가하여 해결했다.
 
 ```bash
@@ -219,6 +257,7 @@ FastAPI를 사용하면서 특정 패턴의 요청에서만 오류가 발생하�
 #### Autoscaling
 
 `HPA` 사용 시 한 순간에 100회의 요청이 입력되면 replica를 생성하기 전에 단일 `fastapi` pod에 입력되기 때문에 autoscaling 효과를 볼 수 없다.
+
 따라서 autoscaling을 원활히 하려면 `Resource` 기준이 아닌 새로운 `metrics`가 필요하다.
 
 <details>

@@ -53,53 +53,57 @@ if __name__ == "__main__":
             EACH[CLIENT] = {SERVER: each}
             TOTAL[CLIENT] = {SERVER: [total]}
 
-    for k, v in EACH.items():
-        fig = plt.figure(figsize=(15, 10))
-        bins = np.linspace(0, BINS[k], 100)
-        plt.grid(True)
-        for kk in COMPARE:
-            try:
-                vv = v[kk]
-                plt.hist(vv, bins=bins, color=COLOR[kk], label=kk, alpha=0.7, zorder=10)
-                print(f"{k}\t{kk}\t{sum(vv) / len(vv):.2f}")
-            except:
-                pass
-        plt.xlabel("API Response Time [Sec]")
-        plt.ylabel("API Response Count")
-        plt.legend()
-        plt.title(f"CLIENT: {k}")
-        plt.savefig(
-            f"figures/EACH-{k}.png",
-            dpi=300,
-            bbox_inches="tight",
-            pad_inches=0.3,
-            transparent=False,
-        )
+    with open("data/EACH.csv", "w") as f:
+        for k, v in EACH.items():
+            fig = plt.figure(figsize=(15, 10))
+            bins = np.linspace(0, BINS[k], 100)
+            plt.grid(True)
+            for kk in COMPARE:
+                try:
+                    vv = v[kk]
+                    plt.hist(
+                        vv, bins=bins, color=COLOR[kk], label=kk, alpha=0.7, zorder=10
+                    )
+                    f.writelines(f"{k},{kk},{sum(vv) / len(vv):.4f}\n")
+                except:
+                    pass
+            plt.xlabel("API Response Time [Sec]")
+            plt.ylabel("API Response Count")
+            plt.legend()
+            plt.title(f"CLIENT: {k}")
+            plt.savefig(
+                f"figures/EACH-{k}.png",
+                dpi=300,
+                bbox_inches="tight",
+                pad_inches=0.3,
+                transparent=False,
+            )
 
-    for k, v in TOTAL.items():
-        idx = np.linspace(-0.4, 0.4, 10)
-        bar_width = (idx[1] - idx[0]) * 0.95
-        fig = plt.figure(figsize=(25, 10))
-        plt.grid(True)
-        xt = []
-        i = 0
-        for kk in COMPARE:
-            try:
-                vv = v[kk]
-                plt.bar(i + idx, vv, bar_width, color=COLOR[kk], zorder=10)
-                print(f"{k}\t{kk}\t{sum(vv) / len(vv):.2f}")
-                xt.append(kk)
-                i += 1
-            except:
-                pass
-        plt.xlabel("Server Architecture")
-        plt.ylabel("Total API Response Time [Sec]")
-        plt.xticks(np.arange(i), xt, rotation=0)
-        plt.title(f"CLIENT: {k}")
-        plt.savefig(
-            f"figures/TOTAL-{k}.png",
-            dpi=300,
-            bbox_inches="tight",
-            pad_inches=0.3,
-            transparent=False,
-        )
+    with open("data/TOTAL.csv", "w") as f:
+        for k, v in TOTAL.items():
+            idx = np.linspace(-0.4, 0.4, 10)
+            bar_width = (idx[1] - idx[0]) * 0.95
+            fig = plt.figure(figsize=(25, 10))
+            plt.grid(True)
+            xt = []
+            i = 0
+            for kk in COMPARE:
+                try:
+                    vv = v[kk]
+                    plt.bar(i + idx, vv, bar_width, color=COLOR[kk], zorder=10)
+                    f.writelines(f"{k},{kk},{sum(vv) / len(vv):.4f}\n")
+                    xt.append(kk)
+                    i += 1
+                except:
+                    pass
+            plt.xlabel("Server Architecture")
+            plt.ylabel("Total API Response Time [Sec]")
+            plt.xticks(np.arange(i), xt, rotation=0)
+            plt.title(f"CLIENT: {k}")
+            plt.savefig(
+                f"figures/TOTAL-{k}.png",
+                dpi=300,
+                bbox_inches="tight",
+                pad_inches=0.3,
+                transparent=False,
+            )
