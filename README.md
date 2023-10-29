@@ -321,6 +321,19 @@ spec:
 
 ### [3.4. Gradio](https://github.com/Zerohertz/YOLO-Serving-Cookbook/tree/3.Kubernetes-4.Gradio)
 
+
+<details>
+<summary>
+Architecture
+</summary>
+<div align="center">
+
+![](https://github.com/Zerohertz/YOLO-Serving-Cookbook/assets/42334717/fa647b85-9716-4fd8-933a-bb92ebbda62f)
+
+</div>
+</details>
+
+
 <div align="center">
 
 ![Gradio](https://github.com/Zerohertz/Zerohertz/assets/42334717/816ec0eb-7ba4-49d4-8302-6a720aba91d4)
