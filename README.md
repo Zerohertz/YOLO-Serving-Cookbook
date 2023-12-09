@@ -1,5 +1,5 @@
 <h1 align = "center">
-    :camera_flash: YOLO Serving Cookbook :camera_flash:
+    📸 YOLO Serving Cookbook 📸
 </h1>
 
 <p align = "center">
